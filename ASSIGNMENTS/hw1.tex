@@ -1,0 +1,215 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\newcommand{\mylabel}[1]{\textnormal{\textsf{[#1]}}
+                                                                                
+\label{#1}}
+\renewcommand{\mylabel}[1]{\label{#1}}
+
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+%
+% mathify-- ensure argument is in math mode
+%
+
+\newcommand{\mathify}[1]{\ifmmode{#1}\else\mbox{$#1$}\fi}
+
+\newcommand{\brk}[1]{\langle #1 \rangle}
+%
+% Impressive box to go at the top of the first page
+%
+
+\def\subjnum{601.745}
+\def\subjname{Advanced Topics in Applied Cryptography}
+
+
+\newcommand{\handout}[5]{
+  \renewcommand{\thepage}{#1-\arabic{page}}
+  \noindent
+  \begin{center}
+    \framebox{
+      \vbox{
+        \hbox to 5.78in { {\bf \subjnum: \subjname} \hfill #2 }
+        \vspace{4mm}
+        \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+        \vspace{2mm}
+        \hbox to 5.78in { {\it #3 \hfill #4} }
+        }
+      }
+  \end{center}
+  \vspace*{4mm}
+  }
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{Lecturer:
+    #3}{Scribe: #4}{Lecture #1}}
+
+\newcommand{\homework}[4]{\handout{#1}{#2}{#3}{#4}{Homework #1}}
+\newcommand{\abs}[1]{\mathify{\left| #1 \right|}}
+\renewcommand{\Pr}[1]{\mathify{\mbox{Pr}\left[#1\right]}}
+\newcommand{\Exp}[1]{\mathify{\mbox{Exp}\left[#1\right]}}
+\newcommand{\set}[1]{\mathify{\left\{ #1 \right\}}}
+\newcommand{\cset}[2]{\set{#1\ :\ #2}}  % a conditional notation to define sets
+\newcommand{\lset}[2]{\set{#1,\ldots,#2}} % set {from,...,to}
+\newcommand{\suchthat}{\vert}
+\newcommand{\st}{\suchthat}
+\newcommand{\length}[1]{\left\vert #1 \right\vert}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proofsketch}{Proof sketch}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+\newcounter{problem}
+\newcounter{subproblem}
+\renewcommand{\theproblem}{\arabic{problem}}
+\renewcommand{\thesubproblem}{\arabic{subproblem}}
+\newenvironment{problem} {\stepcounter{problem} \textbf{Problem
+    \theproblem}:} {\vspace{.1in}}
+\newenvironment{subproblem} {\stepcounter{subproblem} 
+    \thesubproblem :} {}
+\newenvironment{solution} {\textbf{Solution
+    \theproblem}:} {\vspace{.1in}}
+\newcommand{\rep}[1]{\left\langle #1 \right\rangle}
+\newcommand{\Gen}{\mathsf{Gen}}
+\newcommand{\Tag}{\mathsf{Tag}}
+\newcommand{\Vfy}{\mathsf{Vrfy}}
+\newcommand{\Enc}{\mathsf{Enc}}
+\newcommand{\Dec}{\mathsf{Dec}}
+\newcommand{\Group}{\mathbb{G}}
+\newcommand{\Zq}{\mathbb{Z}_q}
+\newcommand{\pk}{\mathsf{pk}}
+\newcommand{\sk}{\mathsf{sk}}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\bitset}{\{0,1\}^*}
+\newcommand{\ma}{\mathcal{A}}
+\newcommand{\mb}{\mathcal{B}}
+\usepackage{url,subfigure,pstricks,ifthen,calc,xspace,graphicx,wrapfig,mdwlist}
+\usepackage{amsmath,amsfonts}
+\psset{unit=0.1in}
+\newcommand{\str}{\mbox{\LARGE\strut}}
+
+\begin{document}
+\handout{Assignment 1}{January 31, 2018}{Instructor: Matthew Green} {Due: 11:59pm, February 12} {Assignment 1}
+
+\bigskip \bigskip \noindent
+{\Large Name:} \underline{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}
+
+\bigskip
+\noindent
+{\bf The assignment should be completed individually. You {are} permitted to use the Internet and any printed references.  
+
+\medskip \noindent
+%Please note: this is only one part of a two-part assignment.  Instructions on obtaining Part 2 are described below.  
+Please submit the completed assignment via Blackboard.}
+
+\newcommand{\adversary}{{\cal A}}
+\newcommand{\newadversary}{{\cal B}}
+
+\bigskip \noindent 
+\begin{problem} {\bf PRFs as MACs.}
+%Sketch a proof of security (or break) the following authenticated encryption constructions. Use the definition of secure authenticated encryption we discussed in class\footnote{See \url{https://cseweb.ucsd.edu/~mihir/papers/oem.html}.} Your proofs do not need to be concrete or formal, but should spell out a full reduction to the hardness of an underlying {\sf SUF-CMA} MAC scheme and {\sf IND-CPA} encryption scheme.
+
+\medskip \noindent
+Let $f: \{0,1\}^{\kappa} \times \{0,1\}^* \rightarrow \{0,1\}^{\ell}$ be a pseudorandom function (PRF) family, such that $f_k(m)$ represents the evaluation with key $k$ at point $m$, and the result is an $\ell$ bit string.\footnote{For a formal definition, see {\em e.g.,} \url{https://cseweb.ucsd.edu/~mihir/cse207/w-prf.pdf} and specifically the security game in Definition 3.4.1.}
+%
+Sketch an informal proof that if $f$ is pseudorandom (and $\ell$ is long enough, say 128 bits), then $f_k(m)$ is a secure MAC on key $k$ and message $m$ in the {\sf SUF-CMA} definition.\footnote{See {\em e.g.,} \url{https://www.cs.jhu.edu/~astubble/dss/ae.pdf}.}
+
+\medskip \noindent
+{\em To help you with this, we will sketch out parts of the theorem and proof below.}
+
+\begin{theorem}
+{\em
+Let $f: \{0,1\}^{\kappa} \times \{0,1\}^* \rightarrow \{0,1\}^{\ell}$ be a PRF family. Then the construction $f_k(m)$ is an {\sf SUF-CMA} MAC.}
+
+\end{theorem}
+
+\begin{proofsketch}
+{\em
+Our proof proceeds as follows. Let us assume by contradiction that $f_k(m)$ is not a secure MAC scheme, {\em i.e.,} that there exists some p.p.t. adversary $\adversary$ that wins the {\sf SUF-CMA} MAC game with non-negligible advantage.\footnote{As a reminder, in the {\sf SUF-CMA} game the adversary is allowed to query an oracle on any number of messages $m_i$, and receives MACs of the form $T = f_k(m_i)$ for each query. At the end of the game it wins if it outputs a pair $(m^*, T^*)$ such that no previous oracle query (resp. response) was $(m^*, T^*)$ and $T^* = f_k(m^*)$. The advantage of $\adversary$ is the probability that it succeeds in this game.} Then we show that there exists a p.p.t. algorithm $\newadversary$ that wins the PRF game, {\em i.e.,} that distinguishes the function $f$ from a random function with non-negligible advantage.
+
+$\newadversary$ operates as follows. It plays the {\sf PRF} game with a challenger. It also runs $\adversary$ internally, and interacts with it as in the {\sf SUF-CMA} game. When $\adversary$ queries the MAC oracle on a message $m_i$, $\newadversary$ answers the query as follows:
+
+\medskip \noindent
+{\bf Fill in this part.}
+
+\medskip \noindent
+When $\adversary$ outputs the ``forgery'' pair $(m^*, T^*)$ (such that, by the definition of $\adversary$, with non-negligible probability $T^* = f_k(m^*)$), $\newadversary$ does the following, and outputs a bit $b$ as its guess in the PRF game.
+
+\medskip \noindent
+{\bf Fill in this part.}
+
+\medskip \noindent
+We argue that if the PRF oracle implements a random function, then:
+
+\medskip \noindent
+{\bf Here explain why $\newadversary$ is able to distinguish whether the oracle implements a PRF or a random function with non-negligible advantage.}
+
+
+\medskip \noindent
+This completes the proof.}
+\end{proofsketch}
+
+\end{problem}
+
+\begin{problem} {\bf Encrypt-and-MAC.} 
+
+\medskip \noindent Let $k_1, k_2$ be two secret keys. Let {\sf Encrypt}$(k_1, M)$ represent encryption of $M$ using a {\sf IND-CPA} encryption scheme under key $k_1$. Let ${\sf MAC}(k_2, M')$ represent the computation of a (deterministic) MAC on message $M'$ using key $k_2$. Let us define the following authenticated encryption scheme:
+$$C = \mathsf{Encrypt}(k_1, M) \| {\sf MAC}(k_2, M) $$
+In class we discussed how this scheme is not secure, because there is a simple attack that breaks the {\sf IND-CPA} (and hence the {\sf IND-CCA}) security of the scheme. Despite this, I want you to {\em attempt} to sketch the reduction proof showing that the above scheme is {\sf IND-CCA}, similar to the one that we discussed in class. Tell me where in the proof your attempt breaks down. This can be a quick explanation, not a full proof.
+\end{problem}
+
+
+\begin{problem} {\bf Encrypt-and-Counter-MAC.} 
+
+\medskip \noindent
+Many versions of the {\tt ssh} protocol use a variant of the following scheme. Let $k_1, k_2$ be two secret keys. Let {\sf Encrypt}$(k_1, M)$ represent encryption of $M$ using a {\sf IND-CPA} encryption scheme under key $k_1$. Let $f_{k_2}(M')$ represent the computation of a pseudorandom function on message $M'$ using key $k_2$ (this acts as a MAC; see Problem 1). 
+
+\medskip \noindent
+Finally, let $i$ be a counter value that begins with $i=0$ on the first message encrypted, and increments for every subsequent message  ({\em i.e.,} you can trust that $i$ will never repeat). The overall authenticated encryption algorithm for message $M$ using counter $i$ is:
+$$C =  \mathsf{Encrypt}(k_1, M) \| f_{k_2}(M \| i) $$
+Is this scheme a secure {\sf IND-CCA} authenticated encryption scheme? If so, sketch a proof that this is true. If not, demonstrate an attack on the scheme that wins the game with non-negligible probability.
+
+\medskip \noindent
+{\em To help you with this, we will sketch out parts of the theorem and proof below.}
+
+\begin{theorem}
+{\em
+Let $f: \{0,1\}^{\kappa} \times \{0,1\}^* \rightarrow \{0,1\}^{\ell}$ be a PRF family, and let $({\sf Encrypt}, {\sf Decrypt})$ be an {\sf IND-CPA}-secure encryption scheme. Then the construction above is an {\sf IND-CCA} encryption scheme.}
+
+\end{theorem}
+
+\begin{proofsketch}
+{\em
+Our proof proceeds as follows. Let us assume by contradiction that the scheme above is {\em not} {\sf IND-CCA} secure {\em i.e.,} that there exists some p.p.t. adversary $\adversary$ that wins the {\sf IND-CCA} game with non-negligible advantage.
+Then we show that there exists a p.p.t. algorithm $\newadversary$ that wins either the {\sf IND-CPA} game against the encryption scheme, or the {\sf PRF} game, {\em i.e.,} that distinguishes the function $f$ from a random function with non-negligible advantage.
+
+$\newadversary$ operates as follows. It plays the {\sf IND-CPA} game with a challenger. It also runs $\adversary$ internally, and interacts with it as in the {\sf IND-CCA} game. First, each time $\adversary$ requests the encryption of a message $m_i$, $\newadversary$ requests the encryption of $m_i$ from the {\sf IND-CPA} challenger, to obtain $c_i$. $\newadversary$ then generates a random string $T_i \leftarrow \{0,1\}^{\ell}$ and records $(m_i, c_i, T_i)$ in a table. It returns $C_i = c_i \| T_i$. When $\adversary$ queries for the decryption of some $C'_i$, $\newadversary$ parses this as $C'_i = c'_i \| T'_i$ and checks its table for an entry of the form $(m'_i, c'_i, T'_i)$. If one is present, it returns $m'_i$. Otherwise it returns $\bot$ to $\adversary$. 
+
+\medskip \noindent
+{\bf Explain the rest of the operation of $\newadversary$ here.}
+
+
+%Each time $\adversary$ requests the decryption of a ciphertext $C'_i$, $\newadversary$ checks whether $C'_i = C_j$ for some $i,j$ and if so returns $m_i$. Otherwise $\newadversary$ returns $\bot$. When $\adversary$ outputs $m_0, m_1$, $\newadverary$ sends these to the {\sf IND-CPA} challenger 
+\medskip \noindent
+{\bf Now argue that as long as $\adversary$ cannot distinguish the random strings $T_i$ from correctly-generated tags $f_k(m_i)$ except with negligible probability, then $\newadversary$ succeeds against the {\sf IND-CPA} game with non-negligible probability.}
+
+\medskip \noindent
+{\bf Finally, present a second proof that $\adversary$ cannot distinguish these strings.}
+
+
+\end{problem}
+
+\end{document}
+
+
+
+
+
